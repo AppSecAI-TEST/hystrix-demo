@@ -1,19 +1,18 @@
 package com.example.demo.commands;
 
-import com.example.demo.PricingDao;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandProperties;
 
 import java.util.function.Function;
 
-public class DaoCommand<T> extends HystrixCommand<T> {
+public class DaoCommand<Value, Dao> extends HystrixCommand<Value> {
     private final String name;
-    private final Function<PricingDao, T> method;
-    private final PricingDao primary;
-    private final PricingDao fallback;
+    private final Function<Dao, Value> method;
+    private final Dao primary;
+    private final Dao fallback;
 
-    public DaoCommand(String name, Function<PricingDao, T> method, PricingDao primary, PricingDao fallback) {
+    public DaoCommand(String name, Function<Dao, Value> method, Dao primary, Dao fallback) {
         super(properties(name));
         this.name = name;
         this.method = method;
@@ -30,12 +29,12 @@ public class DaoCommand<T> extends HystrixCommand<T> {
     }
 
     @Override
-    protected T run() throws Exception {
+    protected Value run() throws Exception {
         return method.apply(primary);
     }
 
     @Override
-    protected T getFallback() {
+    protected Value getFallback() {
         if (fallback == null) return null;
         return new DaoCommand<>(name, method, fallback, null).execute();
     }
