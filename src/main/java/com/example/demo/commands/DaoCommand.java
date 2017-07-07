@@ -36,7 +36,7 @@ public class DaoCommand<T> extends HystrixCommand<T> {
 
     @Override
     protected T getFallback() {
-        if (fallback == null) throw new RuntimeException("Unavailable!");
+        if (fallback == null) return null;
         return new DaoCommand<>(name, method, fallback, null).execute();
     }
 }

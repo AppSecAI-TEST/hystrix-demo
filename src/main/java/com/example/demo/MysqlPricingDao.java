@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
@@ -13,9 +14,13 @@ public class MysqlPricingDao implements PricingDao {
 
     @Override
     public Price getPrice(String name) {
-        return jdbcTemplate.queryForObject("select * from prices where name = ?", (rs, i) ->
-                new Price(rs.getString("name"), rs.getBigDecimal("price"))
-        , name);
+        try {
+            return jdbcTemplate.queryForObject("select * from prices where name = ?", (rs, i) ->
+                            new Price(rs.getString("name"), rs.getBigDecimal("price"))
+                    , name);
+        } catch(EmptyResultDataAccessException ignored) {
+            return null;
+        }
     }
 
     @Override
