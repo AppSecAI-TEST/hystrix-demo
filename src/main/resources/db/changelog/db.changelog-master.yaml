@@ -1,0 +1,48 @@
+databaseChangeLog:
+    - changeSet:
+        author: me
+        id: root
+        changes:
+            - createTable:
+                tableName: prices
+                columns:
+                  - column:
+                      name: name
+                      type: varchar(20)
+                  - column:
+                      name: price
+                      type: number(10, 2)
+            - addPrimaryKey:
+                tableName: prices
+                columnNames: name
+
+            - createTable:
+                tableName: promos
+                columns:
+                  - column:
+                      name: name
+                      type: varchar(20)
+                  - column:
+                      name: promo_type
+                      type: varchar(20)
+                  - column:
+                      name: percent_off
+                      type: number(3)
+                  - column:
+                      name: dollar_off
+                      type: number(10, 2)
+                  - column:
+                      name: target
+                      type: varchar(20)
+            - addPrimaryKey:
+                tableName: promos
+                columnNames: name
+
+            - loadData:
+                tableName: prices
+                separator: ","
+                file: "prices.csv"
+            - loadData:
+                tableName: promos
+                separator: ","
+                file: "promos.csv"

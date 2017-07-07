@@ -1,0 +1,4 @@
+name,promo_type,percent_off,dollar_off,target
+cocaholic,percent_off,25,null,Coca-cola
+pepsi strikes back,dollar_off,null,1.00,pepsi
+stop drink shit,percent_off,90,null,Tea
